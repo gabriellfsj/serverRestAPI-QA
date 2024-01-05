@@ -7,567 +7,572 @@
 	},
 	"item": [
 		{
-			"name": "Geração de massa",
-			"item": [
-				{
-					"name": "Gerar user aleatório",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									"pm.test('Capturar o email,  password e nome do usuário criado', ()=>{\r",
-									"    //variável global \r",
-									"    //console.log(pm.response.json().results[0].name.first)\r",
-									"    pm.globals.set(\"apiNameUser\", pm.response.json().results[0].name.first);\r",
-									"    pm.globals.set(\"apiEmailUser\", pm.response.json().results[0].email);\r",
-									"    pm.globals.set(\"apiPasswordUser\", pm.response.json().results[0].login.password);    \r",
-									"   \r",
-									"});\r",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "https://randomuser.me/api/",
-							"protocol": "https",
-							"host": [
-								"randomuser",
-								"me"
-							],
-							"path": [
-								"api",
-								""
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
 			"name": "Usuários",
 			"item": [
 				{
-					"name": "Listar usuários cadastrados",
-					"event": [
+					"name": "Geração de massa",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"",
-									"pm.test(\"Validar o retorno de um objeto\", function(){",
-									"    pm.expect(pm.response.json()).to.be.an('object')",
-									"});",
-									"",
-									"var schema = {",
-									"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
-									"  \"type\": \"object\",",
-									"  \"properties\": {",
-									"    \"quantidade\": {",
-									"      \"type\": \"integer\"",
-									"    },",
-									"    \"usuarios\": {",
-									"      \"type\": \"array\",",
-									"      \"items\": [",
-									"        {",
-									"          \"type\": \"object\",",
-									"          \"properties\": {",
-									"            \"nome\": {",
-									"              \"type\": \"string\"",
-									"            },",
-									"            \"email\": {",
-									"              \"type\": \"string\"",
-									"            },",
-									"            \"password\": {",
-									"              \"type\": \"string\"",
-									"            },",
-									"            \"administrador\": {",
-									"              \"type\": \"string\"",
-									"            },",
-									"            \"_id\": {",
-									"              \"type\": \"string\"",
-									"            }",
-									"          },",
-									"          \"required\": [",
-									"            \"nome\",",
-									"            \"email\",",
-									"            \"password\",",
-									"            \"administrador\",",
-									"            \"_id\"",
-									"          ]",
-									"        }",
-									"      ]",
-									"    }",
-									"  },",
-									"  \"required\": [",
-									"    \"quantidade\",",
-									"    \"usuarios\"",
-									"  ]",
-									"};",
-									"",
-									"",
-									"pm.test('Validação de contrato', function () {",
-									"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
-									"    ",
-									"});",
-									"",
-									"",
-									"",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/usuarios",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"usuarios"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Cadastrar usuários",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Validação do status code da requisição (esperado 201)\", function () {",
-									"    pm.response.to.have.status(201);",
-									"});",
-									"",
-									"pm.test(\"Validar o retorno de um objeto\", function(){",
-									"    pm.expect(pm.response.json()).to.be.an('object')",
-									"});",
-									"",
-									"var schema = {",
-									"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
-									"  \"type\": \"object\",",
-									"  \"properties\": {",
-									"    \"message\": {",
-									"      \"type\": \"string\"",
-									"    },",
-									"    \"_id\": {",
-									"      \"type\": \"string\"",
-									"    }",
-									"  },",
-									"  \"required\": [",
-									"    \"message\",",
-									"    \"_id\"",
-									"  ]",
-									"};",
-									"",
-									"",
-									"pm.test('Validação de contrato', function () {",
-									"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
-									"    ",
-									"});",
-									"",
-									"pm.test('Validar mensagem do response ', ()=>{",
-									"    pm.expect(pm.response.json().message).to.be.eql(\"Cadastro realizado com sucesso\")",
-									"})",
-									"",
-									"pm.test('Capturar o id do usuário criado', ()=>{",
-									"    //variável global ",
-									"    pm.globals.set(\"idUser\", pm.response.json()._id);",
-									"   ",
-									"})",
-									"",
-									""
-								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "prerequest",
-							"script": {
-								"exec": [
-									"// Usar quando for fazer teste usando o CSV",
-									"",
-									"//pm.globals.unset(\"apiNameUser\");",
-									"//pm.globals.unset(\"apiEmailUser\");",
-									"//pm.globals.unset(\"apiPasswordUser\");",
-									"",
-									"//pm.globals.set(\"apiNameUser\", pm.iterationData.get(\"apiNameUser\"))",
-									"//pm.globals.set(\"apiEmailUser\", pm.iterationData.get(\"apiEmailUser\"))",
-									"//pm.globals.set(\"apiPasswordUser\", pm.iterationData.get(\"apiPasswordUser\"))",
-									"",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"nome\": \"{{apiNameUser}}\",\n  \"email\": \"{{apiEmailUser}}\",\n  \"password\": \"{{apiPasswordUser}}\",\n  \"administrador\": \"true\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"name": "Gerar user aleatório",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test('Capturar o email,  password e nome do usuário criado', ()=>{\r",
+											"    //variável global \r",
+											"    //console.log(pm.response.json().results[0].name.first)\r",
+											"    pm.globals.set(\"apiNameUser\", pm.response.json().results[0].name.first);\r",
+											"    pm.globals.set(\"apiEmailUser\", pm.response.json().results[0].email);\r",
+											"    pm.globals.set(\"apiPasswordUser\", pm.response.json().results[0].login.password);    \r",
+											"   \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
 								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/usuarios",
-							"host": [
-								"{{baseUrl}}"
 							],
-							"path": [
-								"usuarios"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Buscar usuários por ID",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Validar o retorno de um objeto\", function(){",
-									"    pm.expect(pm.response.json()).to.be.an('object');",
-									"});",
-									"",
-									"pm.test('Validar Id do response', ()=>{",
-									"    pm.expect(pm.response.json()._id).to.be.eql(pm.globals.get(\"idUser\"));",
-									"})",
-									"",
-									"var schema = {",
-									"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
-									"  \"type\": \"object\",",
-									"  \"properties\": {",
-									"    \"nome\": {",
-									"      \"type\": \"string\"",
-									"    },",
-									"    \"email\": {",
-									"      \"type\": \"string\"",
-									"    },",
-									"    \"password\": {",
-									"      \"type\": \"string\"",
-									"    },",
-									"    \"administrador\": {",
-									"      \"type\": \"string\"",
-									"    },",
-									"    \"_id\": {",
-									"      \"type\": \"string\"",
-									"    }",
-									"  },",
-									"  \"required\": [",
-									"    \"nome\",",
-									"    \"email\",",
-									"    \"password\",",
-									"    \"administrador\",",
-									"    \"_id\"",
-									"  ]",
-									"};",
-									"",
-									"pm.test('Validação de contrato', function () {",
-									"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
-									"    ",
-									"});",
-									"",
-									"//pm.test('Capturar o email e password do usuário criado', ()=>{",
-									"//    variável global ",
-									"//    pm.globals.set(\"emailUser\", pm.response.json().email);",
-									"//    pm.globals.set(\"passwordUser\", pm.response.json().password);",
-									"//})   ",
-									"",
-									"",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/usuarios/{{idUser}}",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"usuarios",
-								"{{idUser}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Login de usuário",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Validar o retorno de um objeto\", function(){",
-									"    pm.expect(pm.response.json()).to.be.an('object')",
-									"});",
-									"",
-									"var schema = {",
-									"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
-									"  \"type\": \"object\",",
-									"  \"properties\": {",
-									"    \"message\": {",
-									"      \"type\": \"string\"",
-									"    },",
-									"    \"authorization\": {",
-									"      \"type\": \"string\"",
-									"    }",
-									"  },",
-									"  \"required\": [",
-									"    \"message\",",
-									"    \"authorization\"",
-									"  ]",
-									"};",
-									"",
-									"",
-									"pm.test('Validação de contrato', function () {",
-									"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
-									"    ",
-									"});",
-									"",
-									"pm.test('Validar mensagem do response ', ()=>{",
-									"    pm.expect(pm.response.json().message).to.be.eql(\"Login realizado com sucesso\")",
-									"})",
-									"",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"email\": \"{{apiEmailUser}}\",\n  \"password\": \"{{apiPasswordUser}}\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://randomuser.me/api/",
+									"protocol": "https",
+									"host": [
+										"randomuser",
+										"me"
+									],
+									"path": [
+										"api",
+										""
+									]
 								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/login",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"login"
-							]
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Editar usuário",
-					"event": [
+					"name": "Fluxo de usuário",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Validação positiva do status code da requisição (esperado 200)\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Validar o retorno de um objetos\", function(){",
-									"    pm.expect(pm.response.json()).to.be.an('object')",
-									"});",
-									"",
-									"pm.test('Validar mensagem do response ', ()=>{",
-									"    pm.expect(pm.response.json().message).to.be.eql(\"Registro alterado com sucesso\")",
-									"})"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"nome\": \"{{apiNameUser}}\",\n  \"email\": \"{{apiEmailUser}}\",\n  \"password\": \"{{apiPasswordUser}}\",\n  \"administrador\": \"false\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"name": "Listar usuários cadastrados",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"quantidade\": {",
+											"      \"type\": \"integer\"",
+											"    },",
+											"    \"usuarios\": {",
+											"      \"type\": \"array\",",
+											"      \"items\": [",
+											"        {",
+											"          \"type\": \"object\",",
+											"          \"properties\": {",
+											"            \"nome\": {",
+											"              \"type\": \"string\"",
+											"            },",
+											"            \"email\": {",
+											"              \"type\": \"string\"",
+											"            },",
+											"            \"password\": {",
+											"              \"type\": \"string\"",
+											"            },",
+											"            \"administrador\": {",
+											"              \"type\": \"string\"",
+											"            },",
+											"            \"_id\": {",
+											"              \"type\": \"string\"",
+											"            }",
+											"          },",
+											"          \"required\": [",
+											"            \"nome\",",
+											"            \"email\",",
+											"            \"password\",",
+											"            \"administrador\",",
+											"            \"_id\"",
+											"          ]",
+											"        }",
+											"      ]",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"quantidade\",",
+											"    \"usuarios\"",
+											"  ]",
+											"};",
+											"",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
 								}
-							}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/usuarios",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{baseUrl}}/usuarios/{{idUser}}",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"usuarios",
-								"{{idUser}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Buscar usuário editado por ID",
-					"event": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Validar o retorno de um objeto\", function(){",
-									"    pm.expect(pm.response.json()).to.be.an('object');",
-									"});",
-									"",
-									"pm.test('Validar Id do response', ()=>{",
-									"    pm.expect(pm.response.json()._id).to.be.eql(pm.globals.get(\"idUser\"));",
-									"})",
-									"",
-									"var schema = {",
-									"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
-									"  \"type\": \"object\",",
-									"  \"properties\": {",
-									"    \"nome\": {",
-									"      \"type\": \"string\"",
-									"    },",
-									"    \"email\": {",
-									"      \"type\": \"string\"",
-									"    },",
-									"    \"password\": {",
-									"      \"type\": \"string\"",
-									"    },",
-									"    \"administrador\": {",
-									"      \"type\": \"string\"",
-									"    },",
-									"    \"_id\": {",
-									"      \"type\": \"string\"",
-									"    }",
-									"  },",
-									"  \"required\": [",
-									"    \"nome\",",
-									"    \"email\",",
-									"    \"password\",",
-									"    \"administrador\",",
-									"    \"_id\"",
-									"  ]",
-									"};",
-									"",
-									"pm.test('Validação de contrato', function () {",
-									"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
-									"    ",
-									"});",
-									"",
-									"pm.test('Validar valor alterado no response ', ()=>{",
-									"    pm.expect(pm.response.json().administrador).to.be.eql(\"false\")",
-									"})",
-									"",
-									"",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/usuarios/{{idUser}}",
-							"host": [
-								"{{baseUrl}}"
+							"name": "Cadastrar usuários",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 201)\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"message\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"_id\": {",
+											"      \"type\": \"string\"",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"message\",",
+											"    \"_id\"",
+											"  ]",
+											"};",
+											"",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"pm.test('Validar mensagem do response ', ()=>{",
+											"    pm.expect(pm.response.json().message).to.be.eql(\"Cadastro realizado com sucesso\")",
+											"})",
+											"",
+											"pm.test('Capturar o id do usuário criado', ()=>{",
+											"    //variável global ",
+											"    pm.globals.set(\"idUser\", pm.response.json()._id);",
+											"   ",
+											"})",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"// Usar quando for fazer teste usando o CSV",
+											"",
+											"//pm.globals.unset(\"apiNameUser\");",
+											"//pm.globals.unset(\"apiEmailUser\");",
+											"//pm.globals.unset(\"apiPasswordUser\");",
+											"",
+											"//pm.globals.set(\"apiNameUser\", pm.iterationData.get(\"apiNameUser\"))",
+											"//pm.globals.set(\"apiEmailUser\", pm.iterationData.get(\"apiEmailUser\"))",
+											"//pm.globals.set(\"apiPasswordUser\", pm.iterationData.get(\"apiPasswordUser\"))",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"usuarios",
-								"{{idUser}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Excluir usuário",
-					"event": [
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"nome\": \"{{apiNameUser}}\",\n  \"email\": \"{{apiEmailUser}}\",\n  \"password\": \"{{apiPasswordUser}}\",\n  \"administrador\": \"true\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/usuarios",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Validação positiva do status code da requisição (esperado 200)\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Validar o retorno de um objetos\", function(){",
-									"    pm.expect(pm.response.json()).to.be.an('object')",
-									"});",
-									"",
-									"pm.test('Validar mensagem do response ', ()=>{",
-									"    pm.expect(pm.response.json().message).to.be.eql(\"Registro excluído com sucesso\")",
-									"})",
-									"",
-									"",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/usuarios/{{idUser}}",
-							"host": [
-								"{{baseUrl}}"
+							"name": "Buscar usuários por ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object');",
+											"});",
+											"",
+											"pm.test('Validar Id do response', ()=>{",
+											"    pm.expect(pm.response.json()._id).to.be.eql(pm.globals.get(\"idUser\"));",
+											"})",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"nome\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"email\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"password\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"administrador\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"_id\": {",
+											"      \"type\": \"string\"",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"nome\",",
+											"    \"email\",",
+											"    \"password\",",
+											"    \"administrador\",",
+											"    \"_id\"",
+											"  ]",
+											"};",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"//pm.test('Capturar o email e password do usuário criado', ()=>{",
+											"//    variável global ",
+											"//    pm.globals.set(\"emailUser\", pm.response.json().email);",
+											"//    pm.globals.set(\"passwordUser\", pm.response.json().password);",
+											"//})   ",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"usuarios",
-								"{{idUser}}"
-							]
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/usuarios/{{idUser}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"usuarios",
+										"{{idUser}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login de usuário",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"message\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"authorization\": {",
+											"      \"type\": \"string\"",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"message\",",
+											"    \"authorization\"",
+											"  ]",
+											"};",
+											"",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"pm.test('Validar mensagem do response ', ()=>{",
+											"    pm.expect(pm.response.json().message).to.be.eql(\"Login realizado com sucesso\")",
+											"})",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"{{apiEmailUser}}\",\n  \"password\": \"{{apiPasswordUser}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Editar usuário",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação positiva do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objetos\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"pm.test('Validar mensagem do response ', ()=>{",
+											"    pm.expect(pm.response.json().message).to.be.eql(\"Registro alterado com sucesso\")",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"nome\": \"{{apiNameUser}}\",\n  \"email\": \"{{apiEmailUser}}\",\n  \"password\": \"{{apiPasswordUser}}\",\n  \"administrador\": \"false\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/usuarios/{{idUser}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"usuarios",
+										"{{idUser}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Buscar usuário editado por ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object');",
+											"});",
+											"",
+											"pm.test('Validar Id do response', ()=>{",
+											"    pm.expect(pm.response.json()._id).to.be.eql(pm.globals.get(\"idUser\"));",
+											"})",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"nome\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"email\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"password\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"administrador\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"_id\": {",
+											"      \"type\": \"string\"",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"nome\",",
+											"    \"email\",",
+											"    \"password\",",
+											"    \"administrador\",",
+											"    \"_id\"",
+											"  ]",
+											"};",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"pm.test('Validar valor alterado no response ', ()=>{",
+											"    pm.expect(pm.response.json().administrador).to.be.eql(\"false\")",
+											"})",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/usuarios/{{idUser}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"usuarios",
+										"{{idUser}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Excluir usuário",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação positiva do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objetos\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"pm.test('Validar mensagem do response ', ()=>{",
+											"    pm.expect(pm.response.json().message).to.be.eql(\"Registro excluído com sucesso\")",
+											"})",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/usuarios/{{idUser}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"usuarios",
+										"{{idUser}}"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				}
 			]
 		},
@@ -779,539 +784,2205 @@
 					]
 				},
 				{
-					"name": "Listar produtos cadastrados",
-					"event": [
+					"name": "Fluxo de produto",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"",
-									"pm.test(\"Validar o retorno de um objeto\", function(){",
-									"    pm.expect(pm.response.json()).to.be.an('object')",
-									"});",
-									"",
-									"var schema = {",
-									"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
-									"  \"type\": \"object\",",
-									"  \"properties\": {",
-									"    \"quantidade\": {",
-									"      \"type\": \"integer\"",
-									"    },",
-									"    \"produtos\": {",
-									"      \"type\": \"array\",",
-									"      \"items\": [",
-									"        {",
-									"          \"type\": \"object\",",
-									"          \"properties\": {",
-									"            \"nome\": {",
-									"              \"type\": \"string\"",
-									"            },",
-									"            \"preco\": {",
-									"              \"type\": \"integer\"",
-									"            },",
-									"            \"descricao\": {",
-									"              \"type\": \"string\"",
-									"            },",
-									"            \"quantidade\": {",
-									"              \"type\": \"integer\"",
-									"            },",
-									"            \"_id\": {",
-									"              \"type\": \"string\"",
-									"            }",
-									"          },",
-									"          \"required\": [",
-									"            \"nome\",",
-									"            \"preco\",",
-									"            \"descricao\",",
-									"            \"quantidade\",",
-									"            \"_id\"",
-									"          ]",
-									"        },",
-									"        {",
-									"          \"type\": \"object\",",
-									"          \"properties\": {",
-									"            \"nome\": {",
-									"              \"type\": \"string\"",
-									"            },",
-									"            \"preco\": {",
-									"              \"type\": \"integer\"",
-									"            },",
-									"            \"descricao\": {",
-									"              \"type\": \"string\"",
-									"            },",
-									"            \"quantidade\": {",
-									"              \"type\": \"integer\"",
-									"            },",
-									"            \"_id\": {",
-									"              \"type\": \"string\"",
-									"            }",
-									"          },",
-									"          \"required\": [",
-									"            \"nome\",",
-									"            \"preco\",",
-									"            \"descricao\",",
-									"            \"quantidade\",",
-									"            \"_id\"",
-									"          ]",
-									"        }",
-									"      ]",
-									"    }",
-									"  },",
-									"  \"required\": [",
-									"    \"quantidade\",",
-									"    \"produtos\"",
-									"  ]",
-									"};",
-									"",
-									"",
-									"pm.test('Validação de contrato', function () {",
-									"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
-									"    ",
-									"});",
-									"",
-									"",
-									"",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/produtos",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"produtos"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Cadastrar produtos",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Validação do status code da requisição (esperado 201)\", function () {",
-									"    pm.response.to.have.status(201);",
-									"});",
-									"",
-									"pm.test(\"Validar o retorno de um objeto\", function(){",
-									"    pm.expect(pm.response.json()).to.be.an('object')",
-									"});",
-									"",
-									"var schema = {",
-									"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
-									"  \"type\": \"object\",",
-									"  \"properties\": {",
-									"    \"message\": {",
-									"      \"type\": \"string\"",
-									"    },",
-									"    \"_id\": {",
-									"      \"type\": \"string\"",
-									"    }",
-									"  },",
-									"  \"required\": [",
-									"    \"message\",",
-									"    \"_id\"",
-									"  ]",
-									"};",
-									"",
-									"",
-									"pm.test('Validação de contrato', function () {",
-									"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
-									"    ",
-									"});",
-									"",
-									"pm.test('Validar mensagem do response ', ()=>{",
-									"    pm.expect(pm.response.json().message).to.be.eql(\"Cadastro realizado com sucesso\")",
-									"})",
-									"",
-									"pm.test('Capturar o id do usuário criado', ()=>{",
-									"    //variável global ",
-									"    pm.globals.set(\"idproduct\", pm.response.json()._id);",
-									"   ",
-									"})",
-									"",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "apikey",
-							"apikey": [
+							"name": "Listar produtos cadastrados",
+							"event": [
 								{
-									"key": "value",
-									"value": "{{authorizationId}}",
-									"type": "string"
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"quantidade\": {",
+											"      \"type\": \"integer\"",
+											"    },",
+											"    \"produtos\": {",
+											"      \"type\": \"array\",",
+											"      \"items\": [",
+											"        {",
+											"          \"type\": \"object\",",
+											"          \"properties\": {",
+											"            \"nome\": {",
+											"              \"type\": \"string\"",
+											"            },",
+											"            \"preco\": {",
+											"              \"type\": \"integer\"",
+											"            },",
+											"            \"descricao\": {",
+											"              \"type\": \"string\"",
+											"            },",
+											"            \"quantidade\": {",
+											"              \"type\": \"integer\"",
+											"            },",
+											"            \"_id\": {",
+											"              \"type\": \"string\"",
+											"            }",
+											"          },",
+											"          \"required\": [",
+											"            \"nome\",",
+											"            \"preco\",",
+											"            \"descricao\",",
+											"            \"quantidade\",",
+											"            \"_id\"",
+											"          ]",
+											"        },",
+											"        {",
+											"          \"type\": \"object\",",
+											"          \"properties\": {",
+											"            \"nome\": {",
+											"              \"type\": \"string\"",
+											"            },",
+											"            \"preco\": {",
+											"              \"type\": \"integer\"",
+											"            },",
+											"            \"descricao\": {",
+											"              \"type\": \"string\"",
+											"            },",
+											"            \"quantidade\": {",
+											"              \"type\": \"integer\"",
+											"            },",
+											"            \"_id\": {",
+											"              \"type\": \"string\"",
+											"            }",
+											"          },",
+											"          \"required\": [",
+											"            \"nome\",",
+											"            \"preco\",",
+											"            \"descricao\",",
+											"            \"quantidade\",",
+											"            \"_id\"",
+											"          ]",
+											"        }",
+											"      ]",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"quantidade\",",
+											"    \"produtos\"",
+											"  ]",
+											"};",
+											"",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/produtos",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"produtos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cadastrar produtos",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 201)\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"message\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"_id\": {",
+											"      \"type\": \"string\"",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"message\",",
+											"    \"_id\"",
+											"  ]",
+											"};",
+											"",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"pm.test('Validar mensagem do response ', ()=>{",
+											"    pm.expect(pm.response.json().message).to.be.eql(\"Cadastro realizado com sucesso\")",
+											"})",
+											"",
+											"pm.test('Capturar o id do usuário criado', ()=>{",
+											"    //variável global ",
+											"    pm.globals.set(\"idproduct\", pm.response.json()._id);",
+											"   ",
+											"})",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{authorizationId}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
 								},
-								{
-									"key": "key",
-									"value": "Authorization",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"nome\": \"PC Gamer\",\n  \"preco\": 6000,\n  \"descricao\": \"Computador\",\n  \"quantidade\": 150\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/produtos",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"produtos"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Buscar produtos por ID",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Validar o retorno de um objeto\", function(){",
-									"    pm.expect(pm.response.json()).to.be.an('object');",
-									"});",
-									"",
-									"pm.test('Validar Id do response', ()=>{",
-									"    pm.expect(pm.response.json()._id).to.be.eql(pm.globals.get(\"idproduct\"));",
-									"})",
-									"",
-									"var schema = {",
-									"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
-									"  \"type\": \"object\",",
-									"  \"properties\": {",
-									"    \"nome\": {",
-									"      \"type\": \"string\"",
-									"    },",
-									"    \"preco\": {",
-									"      \"type\": \"integer\"",
-									"    },",
-									"    \"descricao\": {",
-									"      \"type\": \"string\"",
-									"    },",
-									"    \"quantidade\": {",
-									"      \"type\": \"integer\"",
-									"    },",
-									"    \"_id\": {",
-									"      \"type\": \"string\"",
-									"    }",
-									"  },",
-									"  \"required\": [",
-									"    \"nome\",",
-									"    \"preco\",",
-									"    \"descricao\",",
-									"    \"quantidade\",",
-									"    \"_id\"",
-									"  ]",
-									"};",
-									"",
-									"pm.test('Validação de contrato', function () {",
-									"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
-									"    ",
-									"});",
-									"",
-									"pm.test('Capturar o email e password do usuário criado', ()=>{",
-									"    //variável global ",
-									"    pm.globals.set(\"emailUser\", pm.response.json().email);",
-									"    pm.globals.set(\"passwordUser\", pm.response.json().password);",
-									"})",
-									"",
-									"",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/produtos/{{idproduct}}",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"produtos",
-								"{{idproduct}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Editar produto",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Validação positiva do status code da requisição (esperado 200)\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Validar o retorno de um objetos\", function(){",
-									"    pm.expect(pm.response.json()).to.be.an('object')",
-									"});",
-									"",
-									"pm.test('Validar mensagem do response ', ()=>{",
-									"    pm.expect(pm.response.json().message).to.be.eql(\"Registro alterado com sucesso\")",
-									"})"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "apikey",
-							"apikey": [
-								{
-									"key": "value",
-									"value": "{{authorizationId}}",
-									"type": "string"
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"nome\": \"PC Gamer\",\n  \"preco\": 6000,\n  \"descricao\": \"Computador\",\n  \"quantidade\": 150\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
 								},
-								{
-									"key": "key",
-									"value": "Authorization",
-									"type": "string"
+								"url": {
+									"raw": "{{baseUrl}}/produtos",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"produtos"
+									]
 								}
-							]
+							},
+							"response": []
 						},
-						"method": "PUT",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"nome\": \"PC Gamer\",\n  \"preco\": 6000,\n  \"descricao\": \"Computador\",\n  \"quantidade\": 400\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/produtos/{{idproduct}}",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"produtos",
-								"{{idproduct}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Buscar produto editado por ID",
-					"event": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Validar o retorno de um objeto\", function(){",
-									"    pm.expect(pm.response.json()).to.be.an('object');",
-									"});",
-									"",
-									"pm.test('Validar Id do response', ()=>{",
-									"    pm.expect(pm.response.json()._id).to.be.eql(pm.globals.get(\"idproduct\"));",
-									"})",
-									"",
-									"var schema = {",
-									"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
-									"  \"type\": \"object\",",
-									"  \"properties\": {",
-									"    \"nome\": {",
-									"      \"type\": \"string\"",
-									"    },",
-									"    \"preco\": {",
-									"      \"type\": \"integer\"",
-									"    },",
-									"    \"descricao\": {",
-									"      \"type\": \"string\"",
-									"    },",
-									"    \"quantidade\": {",
-									"      \"type\": \"integer\"",
-									"    },",
-									"    \"_id\": {",
-									"      \"type\": \"string\"",
-									"    }",
-									"  },",
-									"  \"required\": [",
-									"    \"nome\",",
-									"    \"preco\",",
-									"    \"descricao\",",
-									"    \"quantidade\",",
-									"    \"_id\"",
-									"  ]",
-									"};",
-									"",
-									"pm.test('Validação de contrato', function () {",
-									"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
-									"    ",
-									"});",
-									"",
-									"pm.test('Validar valor alterado no response ', ()=>{",
-									"    pm.expect(pm.response.json().quantidade).to.be.eql(400)",
-									"})",
-									"",
-									"",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/produtos/{{idproduct}}",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"produtos",
-								"{{idproduct}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Excluir produto",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Validação positiva do status code da requisição (esperado 200)\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Validar o retorno de um objetos\", function(){",
-									"    pm.expect(pm.response.json()).to.be.an('object')",
-									"});",
-									"",
-									"pm.test('Validar mensagem do response ', ()=>{",
-									"    pm.expect(pm.response.json().message).to.be.eql(\"Registro excluído com sucesso\")",
-									"})",
-									"",
-									"",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "apikey",
-							"apikey": [
+							"name": "Buscar produtos por ID",
+							"event": [
 								{
-									"key": "value",
-									"value": "{{authorizationId}}",
-									"type": "string"
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object');",
+											"});",
+											"",
+											"pm.test('Validar Id do response', ()=>{",
+											"    pm.expect(pm.response.json()._id).to.be.eql(pm.globals.get(\"idproduct\"));",
+											"})",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"nome\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"preco\": {",
+											"      \"type\": \"integer\"",
+											"    },",
+											"    \"descricao\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"quantidade\": {",
+											"      \"type\": \"integer\"",
+											"    },",
+											"    \"_id\": {",
+											"      \"type\": \"string\"",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"nome\",",
+											"    \"preco\",",
+											"    \"descricao\",",
+											"    \"quantidade\",",
+											"    \"_id\"",
+											"  ]",
+											"};",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/produtos/{{idproduct}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"produtos",
+										"{{idproduct}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Editar produto",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação positiva do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objetos\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"pm.test('Validar mensagem do response ', ()=>{",
+											"    pm.expect(pm.response.json().message).to.be.eql(\"Registro alterado com sucesso\")",
+											"})"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{authorizationId}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
 								},
-								{
-									"key": "key",
-									"value": "Authorization",
-									"type": "string"
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"nome\": \"PC Gamer\",\n  \"preco\": 6000,\n  \"descricao\": \"Computador\",\n  \"quantidade\": 400\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/produtos/{{idproduct}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"produtos",
+										"{{idproduct}}"
+									]
 								}
-							]
+							},
+							"response": []
 						},
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/produtos/{{idproduct}}",
-							"host": [
-								"{{baseUrl}}"
+						{
+							"name": "Buscar produto editado por ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object');",
+											"});",
+											"",
+											"pm.test('Validar Id do response', ()=>{",
+											"    pm.expect(pm.response.json()._id).to.be.eql(pm.globals.get(\"idproduct\"));",
+											"})",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"nome\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"preco\": {",
+											"      \"type\": \"integer\"",
+											"    },",
+											"    \"descricao\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"quantidade\": {",
+											"      \"type\": \"integer\"",
+											"    },",
+											"    \"_id\": {",
+											"      \"type\": \"string\"",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"nome\",",
+											"    \"preco\",",
+											"    \"descricao\",",
+											"    \"quantidade\",",
+											"    \"_id\"",
+											"  ]",
+											"};",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"pm.test('Validar valor alterado no response ', ()=>{",
+											"    pm.expect(pm.response.json().quantidade).to.be.eql(400)",
+											"})",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"produtos",
-								"{{idproduct}}"
-							]
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/produtos/{{idproduct}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"produtos",
+										"{{idproduct}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Excluir produto",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação positiva do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objetos\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"pm.test('Validar mensagem do response ', ()=>{",
+											"    pm.expect(pm.response.json().message).to.be.eql(\"Registro excluído com sucesso\")",
+											"})",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{authorizationId}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/produtos/{{idproduct}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"produtos",
+										"{{idproduct}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Excluir usuário",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação positiva do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objetos\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"pm.test('Validar mensagem do response ', ()=>{",
+											"    pm.expect(pm.response.json().message).to.be.eql(\"Registro excluído com sucesso\")",
+											"})",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/usuarios/{{idUser}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"usuarios",
+										"{{idUser}}"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
+				}
+			]
+		},
+		{
+			"name": "Carrinho",
+			"item": [
+				{
+					"name": "Login de usuário para cadastrar o carrinho",
+					"item": [
+						{
+							"name": "Gerar massa de teste aleatória",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test('Capturar o email,  password e nome do usuário criado', ()=>{\r",
+											"    //variável global \r",
+											"    //console.log(pm.response.json().results[0].name.first)\r",
+											"    pm.globals.set(\"apiNameUser\", pm.response.json().results[0].name.first);\r",
+											"    pm.globals.set(\"apiEmailUser\", pm.response.json().results[0].email);\r",
+											"    pm.globals.set(\"apiPasswordUser\", pm.response.json().results[0].login.password);    \r",
+											"   \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://randomuser.me/api/",
+									"protocol": "https",
+									"host": [
+										"randomuser",
+										"me"
+									],
+									"path": [
+										"api",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cadastrar usuários",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 201)\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"message\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"_id\": {",
+											"      \"type\": \"string\"",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"message\",",
+											"    \"_id\"",
+											"  ]",
+											"};",
+											"",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"pm.test('Validar mensagem do response ', ()=>{",
+											"    pm.expect(pm.response.json().message).to.be.eql(\"Cadastro realizado com sucesso\")",
+											"})",
+											"",
+											"pm.test('Capturar o id do usuário criado', ()=>{",
+											"    //variável global ",
+											"    pm.globals.set(\"idUser\", pm.response.json()._id);",
+											"   ",
+											"})",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"nome\": \"{{apiNameUser}}\",\n  \"email\": \"{{apiEmailUser}}\",\n  \"password\": \"{{apiPasswordUser}}\",\n  \"administrador\": \"true\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/usuarios",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login de usuário",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"message\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"authorization\": {",
+											"      \"type\": \"string\"",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"message\",",
+											"    \"authorization\"",
+											"  ]",
+											"};",
+											"",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"pm.test('Validar mensagem do response ', ()=>{",
+											"    pm.expect(pm.response.json().message).to.be.eql(\"Login realizado com sucesso\")",
+											"})",
+											"",
+											"pm.test('Capturar o authorization do usuário criado', ()=>{",
+											"    //variável global ",
+											"    pm.globals.set(\"authorizationId\", pm.response.json().authorization);",
+											"   ",
+											"})",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"{{apiEmailUser}}\",\n  \"password\": \"{{apiPasswordUser}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				},
 				{
-					"name": "Excluir usuário",
-					"event": [
+					"name": "Cadastrar produto para o carrinho",
+					"item": [
 						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Validação positiva do status code da requisição (esperado 200)\", function () {",
-									"    pm.response.to.have.status(200);",
-									"});",
-									"",
-									"pm.test(\"Validar o retorno de um objetos\", function(){",
-									"    pm.expect(pm.response.json()).to.be.an('object')",
-									"});",
-									"",
-									"pm.test('Validar mensagem do response ', ()=>{",
-									"    pm.expect(pm.response.json().message).to.be.eql(\"Registro excluído com sucesso\")",
-									"})",
-									"",
-									"",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{baseUrl}}/usuarios/{{idUser}}",
-							"host": [
-								"{{baseUrl}}"
+							"name": "Cadastrar produto",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 201)\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"message\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"_id\": {",
+											"      \"type\": \"string\"",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"message\",",
+											"    \"_id\"",
+											"  ]",
+											"};",
+											"",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"pm.test('Validar mensagem do response ', ()=>{",
+											"    pm.expect(pm.response.json().message).to.be.eql(\"Cadastro realizado com sucesso\")",
+											"})",
+											"",
+											"pm.test('Capturar o id do usuário criado', ()=>{",
+											"    //variável global ",
+											"    pm.globals.set(\"idproduct\", pm.response.json()._id);",
+											"   ",
+											"})",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
 							],
-							"path": [
-								"usuarios",
-								"{{idUser}}"
-							]
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{authorizationId}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"nome\": \"PC Gamer\",\n  \"preco\": 6000,\n  \"descricao\": \"Computador\",\n  \"quantidade\": 150\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/produtos",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"produtos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Buscar produtos por ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object');",
+											"});",
+											"",
+											"pm.test('Validar Id do response', ()=>{",
+											"    pm.expect(pm.response.json()._id).to.be.eql(pm.globals.get(\"idproduct\"));",
+											"})",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"nome\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"preco\": {",
+											"      \"type\": \"integer\"",
+											"    },",
+											"    \"descricao\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"quantidade\": {",
+											"      \"type\": \"integer\"",
+											"    },",
+											"    \"_id\": {",
+											"      \"type\": \"string\"",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"nome\",",
+											"    \"preco\",",
+											"    \"descricao\",",
+											"    \"quantidade\",",
+											"    \"_id\"",
+											"  ]",
+											"};",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"pm.test('Capturar o email e password do usuário criado', ()=>{",
+											"    //variável global ",
+											"    pm.globals.set(\"emailUser\", pm.response.json().email);",
+											"    pm.globals.set(\"passwordUser\", pm.response.json().password);",
+											"})",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/produtos/{{idproduct}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"produtos",
+										"{{idproduct}}"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
+				},
+				{
+					"name": "Fluxo carrinho",
+					"item": [
+						{
+							"name": "Cadastrar carrinho",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 201)\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"message\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"_id\": {",
+											"      \"type\": \"string\"",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"message\",",
+											"    \"_id\"",
+											"  ]",
+											"};",
+											"",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"pm.test('Validar mensagem do response ', ()=>{",
+											"    pm.expect(pm.response.json().message).to.be.eql(\"Cadastro realizado com sucesso\")",
+											"})",
+											"",
+											"pm.test('Capturar o id do usuário criado', ()=>{",
+											"    //variável global ",
+											"    pm.globals.set(\"idCarrinho\", pm.response.json()._id);",
+											"   ",
+											"})",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{authorizationId}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"produtos\": [\n    {\n      \"idProduto\": \"{{idproduct}}\",\n      \"quantidade\": 5\n    }\n  ]\n}\n\n\n\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/carrinhos",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"carrinhos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Buscar carinho por ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object');",
+											"});",
+											"",
+											"pm.test('Validar Id do response', ()=>{",
+											"    pm.expect(pm.response.json()._id).to.be.eql(pm.globals.get(\"idCarrinho\"));",
+											"})",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"produtos\": {",
+											"      \"type\": \"array\",",
+											"      \"items\": [",
+											"        {",
+											"          \"type\": \"object\",",
+											"          \"properties\": {",
+											"            \"idProduto\": {",
+											"              \"type\": \"string\"",
+											"            },",
+											"            \"quantidade\": {",
+											"              \"type\": \"integer\"",
+											"            },",
+											"            \"precoUnitario\": {",
+											"              \"type\": \"integer\"",
+											"            }",
+											"          },",
+											"          \"required\": [",
+											"            \"idProduto\",",
+											"            \"quantidade\",",
+											"            \"precoUnitario\"",
+											"          ]",
+											"        }",
+											"      ]",
+											"    },",
+											"    \"precoTotal\": {",
+											"      \"type\": \"integer\"",
+											"    },",
+											"    \"quantidadeTotal\": {",
+											"      \"type\": \"integer\"",
+											"    },",
+											"    \"idUsuario\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"_id\": {",
+											"      \"type\": \"string\"",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"produtos\",",
+											"    \"precoTotal\",",
+											"    \"quantidadeTotal\",",
+											"    \"idUsuario\",",
+											"    \"_id\"",
+											"  ]",
+											"};",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/carrinhos/{{idCarrinho}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"carrinhos",
+										"{{idCarrinho}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Buscar produtos por ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object');",
+											"});",
+											"",
+											"pm.test('Validar Id do response', ()=>{",
+											"    pm.expect(pm.response.json()._id).to.be.eql(pm.globals.get(\"idproduct\"));",
+											"})",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"nome\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"preco\": {",
+											"      \"type\": \"integer\"",
+											"    },",
+											"    \"descricao\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"quantidade\": {",
+											"      \"type\": \"integer\"",
+											"    },",
+											"    \"_id\": {",
+											"      \"type\": \"string\"",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"nome\",",
+											"    \"preco\",",
+											"    \"descricao\",",
+											"    \"quantidade\",",
+											"    \"_id\"",
+											"  ]",
+											"};",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"pm.test('Validar alteração de produtos no estoque', ()=>{",
+											"    pm.expect(pm.response.json().quantidade).to.be.eql(145);",
+											"});",
+											"",
+											"pm.test('Capturar o email e password do usuário criado', ()=>{",
+											"    //variável global ",
+											"    pm.globals.set(\"emailUser\", pm.response.json().email);",
+											"    pm.globals.set(\"passwordUser\", pm.response.json().password);",
+											"});",
+											"",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/produtos/{{idproduct}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"produtos",
+										"{{idproduct}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Excluir carrinho",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação positiva do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objetos\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"pm.test('Validar mensagem do response ', ()=>{",
+											"    pm.expect(pm.response.json().message).to.be.eql(\"Registro excluído com sucesso\")",
+											"});",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{authorizationId}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/carrinhos/concluir-compra",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"carrinhos",
+										"concluir-compra"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Excluir produto e usuário",
+					"item": [
+						{
+							"name": "Excluir produto",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação positiva do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objetos\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"pm.test('Validar mensagem do response ', ()=>{",
+											"    pm.expect(pm.response.json().message).to.be.eql(\"Registro excluído com sucesso\")",
+											"})",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{authorizationId}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/produtos/{{idproduct}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"produtos",
+										"{{idproduct}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Excluir usuário",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação positiva do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objetos\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"pm.test('Validar mensagem do response ', ()=>{",
+											"    pm.expect(pm.response.json().message).to.be.eql(\"Registro excluído com sucesso\")",
+											"})",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/usuarios/{{idUser}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"usuarios",
+										"{{idUser}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Carrinho cancelar compra",
+			"item": [
+				{
+					"name": "Login de usuário para cadastrar o carrinho",
+					"item": [
+						{
+							"name": "Gerar massa de teste aleatória",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test('Capturar o email,  password e nome do usuário criado', ()=>{\r",
+											"    //variável global \r",
+											"    //console.log(pm.response.json().results[0].name.first)\r",
+											"    pm.globals.set(\"apiNameUser\", pm.response.json().results[0].name.first);\r",
+											"    pm.globals.set(\"apiEmailUser\", pm.response.json().results[0].email);\r",
+											"    pm.globals.set(\"apiPasswordUser\", pm.response.json().results[0].login.password);    \r",
+											"   \r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://randomuser.me/api/",
+									"protocol": "https",
+									"host": [
+										"randomuser",
+										"me"
+									],
+									"path": [
+										"api",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cadastrar usuários",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 201)\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"message\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"_id\": {",
+											"      \"type\": \"string\"",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"message\",",
+											"    \"_id\"",
+											"  ]",
+											"};",
+											"",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"pm.test('Validar mensagem do response ', ()=>{",
+											"    pm.expect(pm.response.json().message).to.be.eql(\"Cadastro realizado com sucesso\")",
+											"})",
+											"",
+											"pm.test('Capturar o id do usuário criado', ()=>{",
+											"    //variável global ",
+											"    pm.globals.set(\"idUser\", pm.response.json()._id);",
+											"   ",
+											"})",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"nome\": \"{{apiNameUser}}\",\n  \"email\": \"{{apiEmailUser}}\",\n  \"password\": \"{{apiPasswordUser}}\",\n  \"administrador\": \"true\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/usuarios",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"usuarios"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login de usuário",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"message\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"authorization\": {",
+											"      \"type\": \"string\"",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"message\",",
+											"    \"authorization\"",
+											"  ]",
+											"};",
+											"",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"pm.test('Validar mensagem do response ', ()=>{",
+											"    pm.expect(pm.response.json().message).to.be.eql(\"Login realizado com sucesso\")",
+											"})",
+											"",
+											"pm.test('Capturar o authorization do usuário criado', ()=>{",
+											"    //variável global ",
+											"    pm.globals.set(\"authorizationId\", pm.response.json().authorization);",
+											"   ",
+											"})",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"email\": \"{{apiEmailUser}}\",\n  \"password\": \"{{apiPasswordUser}}\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/login",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Cadastrar produto para o carrinho",
+					"item": [
+						{
+							"name": "Cadastrar produto",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 201)\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"message\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"_id\": {",
+											"      \"type\": \"string\"",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"message\",",
+											"    \"_id\"",
+											"  ]",
+											"};",
+											"",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"pm.test('Validar mensagem do response ', ()=>{",
+											"    pm.expect(pm.response.json().message).to.be.eql(\"Cadastro realizado com sucesso\")",
+											"})",
+											"",
+											"pm.test('Capturar o id do usuário criado', ()=>{",
+											"    //variável global ",
+											"    pm.globals.set(\"idproduct\", pm.response.json()._id);",
+											"   ",
+											"})",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{authorizationId}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"nome\": \"PC Gamer\",\n  \"preco\": 6000,\n  \"descricao\": \"Computador\",\n  \"quantidade\": 150\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/produtos",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"produtos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Buscar produtos por ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object');",
+											"});",
+											"",
+											"pm.test('Validar Id do response', ()=>{",
+											"    pm.expect(pm.response.json()._id).to.be.eql(pm.globals.get(\"idproduct\"));",
+											"})",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"nome\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"preco\": {",
+											"      \"type\": \"integer\"",
+											"    },",
+											"    \"descricao\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"quantidade\": {",
+											"      \"type\": \"integer\"",
+											"    },",
+											"    \"_id\": {",
+											"      \"type\": \"string\"",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"nome\",",
+											"    \"preco\",",
+											"    \"descricao\",",
+											"    \"quantidade\",",
+											"    \"_id\"",
+											"  ]",
+											"};",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"pm.test('Capturar o email e password do usuário criado', ()=>{",
+											"    //variável global ",
+											"    pm.globals.set(\"emailUser\", pm.response.json().email);",
+											"    pm.globals.set(\"passwordUser\", pm.response.json().password);",
+											"})",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/produtos/{{idproduct}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"produtos",
+										"{{idproduct}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Fluxo carrinho cancelar compra",
+					"item": [
+						{
+							"name": "Cadastrar carrinho",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 201)\", function () {",
+											"    pm.response.to.have.status(201);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"message\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"_id\": {",
+											"      \"type\": \"string\"",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"message\",",
+											"    \"_id\"",
+											"  ]",
+											"};",
+											"",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"pm.test('Validar mensagem do response ', ()=>{",
+											"    pm.expect(pm.response.json().message).to.be.eql(\"Cadastro realizado com sucesso\")",
+											"})",
+											"",
+											"pm.test('Capturar o id do usuário criado', ()=>{",
+											"    //variável global ",
+											"    pm.globals.set(\"idCarrinho\", pm.response.json()._id);",
+											"   ",
+											"})",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{authorizationId}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"produtos\": [\n    {\n      \"idProduto\": \"{{idproduct}}\",\n      \"quantidade\": 5\n    }\n  ]\n}\n\n\n\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/carrinhos",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"carrinhos"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Buscar carinho por ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object');",
+											"});",
+											"",
+											"pm.test('Validar Id do response', ()=>{",
+											"    pm.expect(pm.response.json()._id).to.be.eql(pm.globals.get(\"idCarrinho\"));",
+											"})",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"produtos\": {",
+											"      \"type\": \"array\",",
+											"      \"items\": [",
+											"        {",
+											"          \"type\": \"object\",",
+											"          \"properties\": {",
+											"            \"idProduto\": {",
+											"              \"type\": \"string\"",
+											"            },",
+											"            \"quantidade\": {",
+											"              \"type\": \"integer\"",
+											"            },",
+											"            \"precoUnitario\": {",
+											"              \"type\": \"integer\"",
+											"            }",
+											"          },",
+											"          \"required\": [",
+											"            \"idProduto\",",
+											"            \"quantidade\",",
+											"            \"precoUnitario\"",
+											"          ]",
+											"        }",
+											"      ]",
+											"    },",
+											"    \"precoTotal\": {",
+											"      \"type\": \"integer\"",
+											"    },",
+											"    \"quantidadeTotal\": {",
+											"      \"type\": \"integer\"",
+											"    },",
+											"    \"idUsuario\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"_id\": {",
+											"      \"type\": \"string\"",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"produtos\",",
+											"    \"precoTotal\",",
+											"    \"quantidadeTotal\",",
+											"    \"idUsuario\",",
+											"    \"_id\"",
+											"  ]",
+											"};",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/carrinhos/{{idCarrinho}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"carrinhos",
+										"{{idCarrinho}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Buscar produtos por ID Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objeto\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object');",
+											"});",
+											"",
+											"pm.test('Validar Id do response', ()=>{",
+											"    pm.expect(pm.response.json()._id).to.be.eql(pm.globals.get(\"idproduct\"));",
+											"})",
+											"",
+											"var schema = {",
+											"  \"$schema\": \"http://json-schema.org/draft-04/schema#\",",
+											"  \"type\": \"object\",",
+											"  \"properties\": {",
+											"    \"nome\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"preco\": {",
+											"      \"type\": \"integer\"",
+											"    },",
+											"    \"descricao\": {",
+											"      \"type\": \"string\"",
+											"    },",
+											"    \"quantidade\": {",
+											"      \"type\": \"integer\"",
+											"    },",
+											"    \"_id\": {",
+											"      \"type\": \"string\"",
+											"    }",
+											"  },",
+											"  \"required\": [",
+											"    \"nome\",",
+											"    \"preco\",",
+											"    \"descricao\",",
+											"    \"quantidade\",",
+											"    \"_id\"",
+											"  ]",
+											"};",
+											"",
+											"pm.test('Validação de contrato', function () {",
+											"    pm.expect(tv4.validate(pm.response.json(), schema)).to.be.true;",
+											"    ",
+											"});",
+											"",
+											"pm.test('Validar alteração de produtos no estoque', ()=>{",
+											"    pm.expect(pm.response.json().quantidade).to.be.eql(145);",
+											"});",
+											"",
+											"pm.test('Capturar o email e password do usuário criado', ()=>{",
+											"    //variável global ",
+											"    pm.globals.set(\"emailUser\", pm.response.json().email);",
+											"    pm.globals.set(\"passwordUser\", pm.response.json().password);",
+											"});",
+											"",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/produtos/{{idproduct}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"produtos",
+										"{{idproduct}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Cancelar compra",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação positiva do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objetos\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"pm.test('Validar mensagem do response ', ()=>{",
+											"    pm.expect(pm.response.json().message).to.be.eql(\"Registro excluído com sucesso. Estoque dos produtos reabastecido\")",
+											"});",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{authorizationId}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/carrinhos/cancelar-compra",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"carrinhos",
+										"cancelar-compra"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Excluir produto e usuário",
+					"item": [
+						{
+							"name": "Excluir produto",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação positiva do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objetos\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"pm.test('Validar mensagem do response ', ()=>{",
+											"    pm.expect(pm.response.json().message).to.be.eql(\"Registro excluído com sucesso\")",
+											"})",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "apikey",
+									"apikey": [
+										{
+											"key": "value",
+											"value": "{{authorizationId}}",
+											"type": "string"
+										},
+										{
+											"key": "key",
+											"value": "Authorization",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/produtos/{{idproduct}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"produtos",
+										"{{idproduct}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Excluir usuário",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Validação positiva do status code da requisição (esperado 200)\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Validar o retorno de um objetos\", function(){",
+											"    pm.expect(pm.response.json()).to.be.an('object')",
+											"});",
+											"",
+											"pm.test('Validar mensagem do response ', ()=>{",
+											"    pm.expect(pm.response.json().message).to.be.eql(\"Registro excluído com sucesso\")",
+											"})",
+											"",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/usuarios/{{idUser}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"usuarios",
+										"{{idUser}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		}
